@@ -1,4 +1,4 @@
-/* Copyright 2020 Matt Moretti
+/* Copyright 2020 joshajohnson
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,6 +35,24 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
        _______,  _______,  _______,  _______
 )
 };
+
+const rgblight_segment_t PROGMEM my_numlock_layer[] = RGBLIGHT_LAYER_SEGMENTS(
+    {7, 1, HSV_AZURE}
+);
+
+const rgblight_segment_t* const PROGMEM my_rgb_layers[] = RGBLIGHT_LAYERS_LIST(
+    my_numlock_layer
+);
+
+void keyboard_post_init_user(void) {
+    // Enable the LED layers
+    rgblight_layers = my_rgb_layers;
+}
+
+bool led_update_user(led_t led_state) {
+    rgblight_set_layer_state(0, led_state.num_lock);
+    return true;
+}
 
 void encoder_update_user(uint8_t index, bool clockwise) {
     if (index == 0) { /* Left Encoder */
